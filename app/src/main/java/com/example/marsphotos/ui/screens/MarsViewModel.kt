@@ -15,6 +15,7 @@
  */
 package com.example.marsphotos.ui.screens
 
+import android.net.http.HttpException
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -47,12 +48,17 @@ class MarsViewModel : ViewModel() {
      * Gets Mars photos information from the Mars API Retrofit service and updates the
      * [MarsPhoto] [List] [MutableList].
      */
-    private fun getMarsPhotos() {
+    fun getMarsPhotos() {
         viewModelScope.launch {
+            marsUiState = MarsUiState.Loading
             marsUiState = try {
                 val listResult = MarsApi.retrofitService.getPhotos()
-                MarsUiState.Success(listResult)
+                MarsUiState.Success(
+                    "Success: ${listResult.size} Mars photos retrieved"
+                )
             } catch (e: IOException) {
+                MarsUiState.Error
+            } catch (e: HttpException) {
                 MarsUiState.Error
             }
         }

@@ -1,4 +1,7 @@
 package com.example.marsphotos.network
 
-class MarsPhoto {
-}
+data class MarsPhoto(
+    val id: String,
+    val img_src: String
+)
+
